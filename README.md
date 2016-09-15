@@ -1,0 +1,2 @@
+# elgoog
+elgoogはWeb pageの中を検索するだけのクズみたいなAndroidアプリケーションです。
