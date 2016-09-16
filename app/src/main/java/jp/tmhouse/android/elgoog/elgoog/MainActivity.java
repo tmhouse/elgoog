@@ -29,16 +29,30 @@ public class MainActivity extends AppCompatActivity {
     private TmContinuousSpeechRecognizer  m_csr;
     private ArrayList<String>   m_lastSpeechTextArray;
     private int                 m_doFindTextArrayCount = 0;
+    private String              m_curFindText = null;
+
+    private String[] testData = {
+            "7766号", "77665", "7766語"
+    };
 
     private void doFindTextArray(ArrayList<String> arr) {
-        //if( m_lastSpeechTextArray == null ) {
-            m_lastSpeechTextArray = arr;
-            m_doFindTextArrayCount = 0;
-        //}
+        for( String s : arr ) {
+            Log.d("doFindTextArray", "str=" + s);
+        }
+        m_lastSpeechTextArray = arr;
+        m_doFindTextArrayCount = 0;
+        findNextText();
+    }
+    private void stopFindText() {
+        m_lastSpeechTextArray = null;
+        m_doFindTextArrayCount = 0;
+    }
 
+    private void findNextText() {
         try {
-            String str = m_lastSpeechTextArray.get(m_doFindTextArrayCount);
-            m_searchText.setText(str);
+            m_curFindText = m_lastSpeechTextArray.get(m_doFindTextArrayCount);
+            m_searchText.setText(m_curFindText);
+            m_doFindTextArrayCount++;
         } catch (IndexOutOfBoundsException e) {
             // end
         }
@@ -66,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("app", "activeMatchOrdinal=" + activeMatchOrdinal +
                         ", numberOfMatches=" + numberOfMatches +
                         ", isDoneCounting=" + Boolean.toString(isDoneCounting));
+                if( isDoneCounting ) {
+                    if( numberOfMatches > 0 ) {
+                        Log.i("find text", "found text:" + m_curFindText);
+                        stopFindText();
+                    } else {
+                        Log.i("find text", "not found:" + m_curFindText);
+                        findNextText();
+                    }
+                }
             }
         });
         m_url = (EditText) findViewById(R.id.url);
@@ -79,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 if( action == MotionEvent.ACTION_DOWN ) {
                     m_csr.startListening();
                 } else if( action == MotionEvent.ACTION_UP ) {
-                    //m_csr.stopListening();
+                    m_csr.stopListening();
                 }
                 return false;
             }

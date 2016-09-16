@@ -9,6 +9,7 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -57,8 +58,8 @@ public class TmContinuousSpeechRecognizer {
         }
     }
 
-    // 音声認識を開始する
-    public void startListening() {
+    // 音声入力を開始する
+    public synchronized void startListening() {
         if( m_sr == null ) {
             Toast.makeText(m_act, "音声認識が使えません",
                     Toast.LENGTH_LONG).show();
@@ -66,12 +67,16 @@ public class TmContinuousSpeechRecognizer {
         }
 
         if( m_isListening ) {
-            stopListening();
+            // 連打されたら停止して戻る
+            Log.w("startListening", "連打されたので停止して戻る");
+            //stopListening();
+            m_sr.cancel();
+            m_isListening = false;
+            return;
         }
 
-        // インテントの作成
+        Log.d("startListening", "SpeechRecoginizerにintentを投げる");
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        // 言語モデル指定
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speech please");
@@ -79,7 +84,8 @@ public class TmContinuousSpeechRecognizer {
         m_isListening = true;
     }
 
-    public void stopListening() {
+    // 音声入力の完了を指示する
+    public synchronized void stopListening() {
         if( m_sr != null ) {
             m_sr.stopListening();
         }
@@ -87,7 +93,6 @@ public class TmContinuousSpeechRecognizer {
     }
 
     public void destroy() {
-        stopListening();
         if (m_sr != null) m_sr.destroy();
         m_sr = null;
     }
@@ -99,14 +104,10 @@ public class TmContinuousSpeechRecognizer {
     //}
 
     // RecognitionListenerの定義
-    // 中が空でも全てのメソッドを書く必要がある
     private class listener implements RecognitionListener {
         // 話し始めたときに呼ばれる
         public void onBeginningOfSpeech() {
-            /*Toast.makeText(getApplicationContext(), "onBeginningofSpeech",
-                    Toast.LENGTH_SHORT).show();*/
         }
-
 
         // 結果に対する反応などで追加の音声が来たとき呼ばれる
         // しかし呼ばれる保証はないらしい
@@ -120,7 +121,7 @@ public class TmContinuousSpeechRecognizer {
         }
 
         // ネットワークエラーか認識エラーが起きた時に呼ばれる
-        public void onError(int error) {
+        public synchronized void onError(int error) {
             String reason = "";
             switch (error) {
                 // Audio recording error
@@ -162,9 +163,12 @@ public class TmContinuousSpeechRecognizer {
                     reason = "ERROR_SPEECH_TIMEOUT";
                     break;
             }
+            Log.e("ERROR", reason);
             Toast.makeText(m_act, reason, Toast.LENGTH_SHORT).show();
             //restartListeningService();
-            stopListening();
+            //stopListening();
+            m_isListening = false;
+            m_sr.cancel();
         }
 
         // 将来の使用のために予約されている
@@ -183,7 +187,7 @@ public class TmContinuousSpeechRecognizer {
         }
 
         // 認識結果が準備できた時に呼ばれる
-        public void onResults(Bundle results) {
+        public synchronized void onResults(Bundle results) {
             // 結果をArrayListとして取得
             ArrayList<String> results_array = results.getStringArrayList(
                     SpeechRecognizer.RESULTS_RECOGNITION);
