@@ -1,9 +1,12 @@
 package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
+import android.content.Context;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +17,8 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TextFinder m_textFinder = new TextFinder();
     private Beeper      m_beeper = new Beeper();
     private Prefs       m_prefs;
+    private RadioGroup  m_inputTypeRadioGrp;
 
     /**
      * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
@@ -175,6 +181,13 @@ public class MainActivity extends AppCompatActivity {
 
         m_searchText = (EditText) findViewById(R.id.searchText);
         m_searchText.addTextChangedListener(m_textWatcher);
+        m_searchText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if( hasFocus == false ) {
+                }
+            }
+        });
         m_searchText.requestFocus();
 
         m_go = (Button) findViewById(R.id.go);
@@ -193,7 +206,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setInputMode(m_prefs.getInputMode());
+
+        m_inputTypeRadioGrp = (RadioGroup)findViewById(R.id.inputTypeRadioGrp);
+        m_inputTypeRadioGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int textModeId = ((RadioButton)findViewById(R.id.inputText)).getId();
+                if( textModeId == checkedId ) {
+                    setInputMode(InputType.TYPE_CLASS_TEXT);
+                } else {
+                    setInputMode(InputType.TYPE_CLASS_NUMBER);
+                }
+            }
+        });
+
         init(m_webview);
+    }
+
+    private void setInputMode(int mode) {
+        if( mode == InputType.TYPE_CLASS_NUMBER) {
+            ((RadioButton)findViewById(R.id.inputNumeric)).setChecked(true);
+            m_searchText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        } else if( mode == InputType.TYPE_CLASS_TEXT) {
+            ((RadioButton)findViewById(R.id.inputText)).setChecked(true);
+            m_searchText.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
+        m_prefs.saveInputMode(mode);
     }
 
     private void setFindTextView(String str, boolean fireTextWatcher) {

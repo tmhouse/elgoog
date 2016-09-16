@@ -92,11 +92,40 @@
                 android:src="@android:drawable/ic_btn_speak_now"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/inputTypeRadioGrp"
+                >
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="aA"
+                    android:id="@+id/inputText"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="123..."
+                    android:id="@+id/inputNumeric"/>
+            </RadioGroup>
+
+        </LinearLayout>
+
         <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/webView"
             />
+
     </LinearLayout>
 
 </RelativeLayout>
