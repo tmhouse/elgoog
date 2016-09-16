@@ -40,14 +40,19 @@ public class MainActivity extends AppCompatActivity {
 
         private void doFindTextArray(ArrayList<String> arr) {
             // trimしよう
+            ArrayList<String> trimedArr = new ArrayList<String>(20);
             int size = arr.size();
             for( int i = 0; i < size; i++ ) {
-                String trimed = arr.get(i).trim().replace(" ", "").replace("　", "");
-                arr.set(i, trimed);
+                String org = arr.get(i);
+                String trimed = org.trim().replace(" ", "").replace("　", "");
+                if( ! org.equals(trimed) ) {
+                    trimedArr.add(trimed);
+                    Log.d("doFindTextArray", "trimed added. org=" + org + ", trimed=" + trimed);
+                } else {
+                    Log.d("doFindTextArray", "trimed not added. org=" + org);
+                }
             }
-            for (String s : arr) {
-                Log.d("doFindTextArray", "str=" + s);
-            }
+            arr.addAll(trimedArr);
             m_lastSpeechTextArray = arr;
             m_doFindTextArrayCount = 0;
             findNextText();
@@ -202,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             m_searchText.removeTextChangedListener(m_textWatcher);
             m_searchText.setText(str);
+            m_searchText.setSelection(0, str.length());
             m_searchText.addTextChangedListener(m_textWatcher);
         }
     }
