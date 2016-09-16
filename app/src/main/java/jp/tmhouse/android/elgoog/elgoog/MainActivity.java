@@ -288,6 +288,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setBuiltInZoomControls(true);
+
+        // ピンチイン・アウトできるようにし、改行位置を変更しない
+        webview.getSettings().setLoadWithOverviewMode(true);
+        webview.getSettings().setUseWideViewPort(true);
+
+        // PCモード
+        String newUA= "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0";
+        webview.getSettings().setUserAgentString(newUA);
+
         loadUrl(m_prefs.getLastUrl());
     }
 
