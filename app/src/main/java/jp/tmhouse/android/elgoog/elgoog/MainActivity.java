@@ -84,8 +84,13 @@ public class MainActivity extends AppCompatActivity {
             } catch (IndexOutOfBoundsException e) {
                 // end
                 Log.w("findNextText", "all text were not found");
-                Toast.makeText(getApplicationContext(),
-                        concatArrText() + "\nは全部見つかりません。", Toast.LENGTH_LONG).show();
+                String msg = null;
+                if( m_lastSpeechTextArray.size() > 1 ) {
+                    msg = concatArrText() + "\nは全部見つかりません。";
+                } else {
+                    msg = concatArrText() + "\nは見つかりません。";
+                }
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
                 stopFindText();
                 m_beeper.beep();
                 return;
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         m_url = (EditText) findViewById(R.id.url);
 
         m_mic = (ImageButton) findViewById(R.id.mic);
@@ -164,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         m_searchText = (EditText) findViewById(R.id.searchText);
         m_searchText.addTextChangedListener(m_textWatcher);
-        //m_searchText.requestFocus();
+        m_searchText.requestFocus();
 
         m_go = (Button) findViewById(R.id.go);
         m_go.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +192,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setFindTextView(String str, boolean fireTextWatcher) {
+        String cur = m_searchText.getText().toString();
+        if( cur != null && cur.equals(str) ) {
+            return;
+        }
+
         if( fireTextWatcher ) {
             m_searchText.setText(str);
         } else {

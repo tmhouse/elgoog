@@ -35,14 +35,14 @@ public class Beeper {
 
     private synchronized void playBeep() {
         try {
-            Thread.sleep(300);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
         }
-        m_tone.startTone(ToneGenerator.TONE_PROP_BEEP, 100);
+        m_tone.startTone(ToneGenerator.TONE_PROP_BEEP, 200);
         try {
-            Thread.sleep(100);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
         }
-        m_tone.startTone(ToneGenerator.TONE_PROP_BEEP, 800);
+        m_tone.startTone(ToneGenerator.TONE_PROP_BEEP, 1000);
     }
 }
