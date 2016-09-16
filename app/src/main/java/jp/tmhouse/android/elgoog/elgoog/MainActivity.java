@@ -1,6 +1,9 @@
 package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,34 +30,62 @@ public class MainActivity extends AppCompatActivity {
     private Button      m_clear;
     private ImageButton      m_mic;
     private TmContinuousSpeechRecognizer  m_csr;
-    private ArrayList<String>   m_lastSpeechTextArray;
-    private int                 m_doFindTextArrayCount = 0;
-    private String              m_curFindText = null;
+    private TextFinder m_textFinder = new TextFinder();
+    private Beeper      m_beeper = new Beeper();
 
-    private String[] testData = {
-            "7766号", "77665", "7766語"
-    };
+    /**
+     * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
+     */
+    private class TextFinder {
+        private ArrayList<String> m_lastSpeechTextArray;
+        private int m_doFindTextArrayCount = 0;
+        private String m_curFindText = null;
 
-    private void doFindTextArray(ArrayList<String> arr) {
-        for( String s : arr ) {
-            Log.d("doFindTextArray", "str=" + s);
+        private void doFindTextArray(ArrayList<String> arr) {
+            for (String s : arr) {
+                Log.d("doFindTextArray", "str=" + s);
+            }
+            m_lastSpeechTextArray = arr;
+            m_doFindTextArrayCount = 0;
+            findNextText();
         }
-        m_lastSpeechTextArray = arr;
-        m_doFindTextArrayCount = 0;
-        findNextText();
-    }
-    private void stopFindText() {
-        m_lastSpeechTextArray = null;
-        m_doFindTextArrayCount = 0;
-    }
+        private void doFindText(String str) {
+            if( str == null || str.isEmpty() ) {
+                return;
+            }
+            ArrayList<String> arr = new ArrayList<String>(1);
+            arr.add(str);
+            doFindTextArray(arr);
+        }
 
-    private void findNextText() {
-        try {
-            m_curFindText = m_lastSpeechTextArray.get(m_doFindTextArrayCount);
-            m_searchText.setText(m_curFindText);
+        private String getCurrentText() {
+            return(m_curFindText);
+        }
+
+        private void stopFindText() {
+            m_curFindText = null;
+            m_lastSpeechTextArray = null;
+            m_doFindTextArrayCount = 0;
+        }
+
+        private void findNextText() {
+            if (m_lastSpeechTextArray == null) {
+                return;
+            }
+            try {
+                m_curFindText = m_lastSpeechTextArray.get(m_doFindTextArrayCount);
+                if( m_curFindText == null || m_curFindText.isEmpty() ) {
+                    throw new RuntimeException("why find null string?");
+                }
+                m_webview.findAllAsync(m_curFindText);
+            } catch (IndexOutOfBoundsException e) {
+                // end
+                Log.w("findNextText", "all text were not found");
+                stopFindText();
+                m_beeper.beep();
+                return;
+            }
             m_doFindTextArrayCount++;
-        } catch (IndexOutOfBoundsException e) {
-            // end
         }
     }
 
@@ -68,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         m_csr.setOnResultListener(new TmContinuousSpeechRecognizer.OnRecognizedCB() {
             @Override
             public void onRecognized(ArrayList<String> results) {
-                doFindTextArray(results);
+                m_textFinder.doFindTextArray(results);
             }
         });
 
@@ -80,13 +111,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("app", "activeMatchOrdinal=" + activeMatchOrdinal +
                         ", numberOfMatches=" + numberOfMatches +
                         ", isDoneCounting=" + Boolean.toString(isDoneCounting));
-                if( isDoneCounting ) {
+                if( isDoneCounting && (m_textFinder.getCurrentText() != null) ) {
                     if( numberOfMatches > 0 ) {
-                        Log.i("find text", "found text:" + m_curFindText);
-                        stopFindText();
+                        Log.i("find text", "found text:" + m_textFinder.getCurrentText());
+                        m_textFinder.stopFindText();
                     } else {
-                        Log.i("find text", "not found:" + m_curFindText);
-                        findNextText();
+                        Log.i("find text", "not found:" + m_textFinder.getCurrentText());
+                        m_textFinder.findNextText();
                     }
                 }
             }
@@ -120,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("afterTextChanged", "do findAllAsync:" + s.toString());
-                m_webview.findAllAsync(s.toString());
+                Log.d("afterTextChanged", "find text:" + s.toString());
+                m_textFinder.doFindText(s.toString());
             }
         });
 
