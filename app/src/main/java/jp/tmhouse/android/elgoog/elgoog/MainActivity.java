@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText m_url;
     private EditText m_searchText;
     private Button      m_go;
-    private Button      m_find;
     private Button      m_clear;
     private ImageButton      m_mic;
     private TmContinuousSpeechRecognizer  m_csr;
@@ -42,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
         private String m_curFindText = null;
 
         private void doFindTextArray(ArrayList<String> arr) {
+            // trimしよう
+            int size = arr.size();
+            for( int i = 0; i < size; i++ ) {
+                String trimed = arr.get(i).trim().replace(" ", "").replace("　", "");
+                arr.set(i, trimed);
+            }
             for (String s : arr) {
                 Log.d("doFindTextArray", "str=" + s);
             }
@@ -81,11 +86,27 @@ public class MainActivity extends AppCompatActivity {
             } catch (IndexOutOfBoundsException e) {
                 // end
                 Log.w("findNextText", "all text were not found");
+                Toast.makeText(getApplicationContext(),
+                        concatArrText() + "\nは全部見つかりません。", Toast.LENGTH_LONG).show();
                 stopFindText();
                 m_beeper.beep();
                 return;
             }
             m_doFindTextArrayCount++;
+        }
+
+        private String concatArrText() {
+            StringBuilder sb = new StringBuilder();
+            int len = m_lastSpeechTextArray.size();
+            for( int i = 0; i < len; i++ ) {
+                sb.append("- ");
+                String s = m_lastSpeechTextArray.get(i);
+                sb.append(s);
+                if( i < len ) {
+                    sb.append("\n");
+                }
+            }
+            return(sb.toString());
         }
     }
 
@@ -108,15 +129,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFindResultReceived(
                     int activeMatchOrdinal, int numberOfMatches, boolean isDoneCounting) {
-                Log.i("app", "activeMatchOrdinal=" + activeMatchOrdinal +
+                String curText = m_textFinder.getCurrentText();
+                Log.i("app", "curText=" + curText +
+                        ", activeMatchOrdinal=" + activeMatchOrdinal +
                         ", numberOfMatches=" + numberOfMatches +
                         ", isDoneCounting=" + Boolean.toString(isDoneCounting));
-                if( isDoneCounting && (m_textFinder.getCurrentText() != null) ) {
+                if( isDoneCounting && (curText != null) ) {
                     if( numberOfMatches > 0 ) {
-                        Log.i("find text", "found text:" + m_textFinder.getCurrentText());
+                        Log.i("find text", "found text:" + curText);
                         m_textFinder.stopFindText();
+                        setFindTextView(curText, false);
                     } else {
-                        Log.i("find text", "not found:" + m_textFinder.getCurrentText());
+                        Log.i("find text", "not found:" + curText);
                         m_textFinder.findNextText();
                     }
                 }
@@ -140,21 +164,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         m_searchText = (EditText) findViewById(R.id.searchText);
-        m_searchText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.d("afterTextChanged", "find text:" + s.toString());
-                m_textFinder.doFindText(s.toString());
-            }
-        });
+        m_searchText.addTextChangedListener(m_textWatcher);
 
         m_go = (Button) findViewById(R.id.go);
         m_go.setOnClickListener(new View.OnClickListener() {
@@ -164,25 +174,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        m_find = (Button) findViewById(R.id.find);
-        m_find.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String s = m_searchText.getText().toString();
-                m_webview.findAllAsync(s);
-            }
-        });
-
         m_clear = (Button)findViewById(R.id.clear);
         m_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                m_searchText.setText("");
+                setFindTextView("", false);
             }
         });
 
         init(m_webview);
     }
+
+    private void setFindTextView(String str, boolean fireTextWatcher) {
+        if( fireTextWatcher ) {
+            m_searchText.setText(str);
+        } else {
+            m_searchText.removeTextChangedListener(m_textWatcher);
+            m_searchText.setText(str);
+            m_searchText.addTextChangedListener(m_textWatcher);
+        }
+    }
+
+    private TextWatcher m_textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d("afterTextChanged", "find text:" + s.toString());
+            m_textFinder.doFindText(s.toString());
+        }
+    };
 
     private void init(WebView webview) {
         final Activity activity = this;

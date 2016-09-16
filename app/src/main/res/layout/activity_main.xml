@@ -75,12 +75,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Find"
-                android:id="@+id/find"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Clear"
                 android:id="@+id/clear"/>
 
