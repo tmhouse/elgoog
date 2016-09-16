@@ -164,7 +164,7 @@ public class TmContinuousSpeechRecognizer {
                     break;
             }
             Log.e("ERROR", reason);
-            Toast.makeText(m_act, reason, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(m_act, reason, Toast.LENGTH_SHORT).show();
             //restartListeningService();
             //stopListening();
             m_isListening = false;

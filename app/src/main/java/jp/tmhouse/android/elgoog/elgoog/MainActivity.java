@@ -1,9 +1,6 @@
 package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
-import android.media.AudioManager;
-import android.media.ToneGenerator;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -31,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TmContinuousSpeechRecognizer  m_csr;
     private TextFinder m_textFinder = new TextFinder();
     private Beeper      m_beeper = new Beeper();
+    private Prefs       m_prefs;
 
     /**
      * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
@@ -116,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.e("app", "test");
+        m_prefs = new Prefs(this);
         m_csr = new TmContinuousSpeechRecognizer(this);
         m_csr.setOnResultListener(new TmContinuousSpeechRecognizer.OnRecognizedCB() {
             @Override
@@ -165,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
         m_searchText = (EditText) findViewById(R.id.searchText);
         m_searchText.addTextChangedListener(m_textWatcher);
+        //m_searchText.requestFocus();
 
         m_go = (Button) findViewById(R.id.go);
         m_go.setOnClickListener(new View.OnClickListener() {
@@ -224,9 +224,15 @@ public class MainActivity extends AppCompatActivity {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
             }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                m_prefs.saveLastUrl(url);
+            }
         });
 
-        loadUrl("http://www.google.com");
+        loadUrl(m_prefs.getLastUrl());
     }
 
     private void loadUrl(String url) {
