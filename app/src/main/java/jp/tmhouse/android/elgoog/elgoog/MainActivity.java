@@ -2,7 +2,9 @@ package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -29,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private EditText m_searchText;
     private Button      m_go;
     private Button      m_clear;
-    private ImageButton      m_mic;
     private TmContinuousSpeechRecognizer  m_csr;
     private TextFinder m_textFinder = new TextFinder();
     private Beeper      m_beeper = new Beeper();
     private Prefs       m_prefs;
     private RadioGroup  m_inputTypeRadioGrp;
+    private FloatingActionButton m_speekNowBtn;
 
     /**
      * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
@@ -139,6 +141,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final ColorStateList fireColor =
+                ColorStateList.valueOf(getResources().getColor(R.color.colorAccent));
+        final ColorStateList normalColor =
+                ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary));
+
+        m_speekNowBtn = (FloatingActionButton)findViewById(R.id.speekNowBtn);
+        m_speekNowBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                //Log.d("mic onTouch", "action=" + event.getAction());
+                if( action == MotionEvent.ACTION_DOWN ) {
+                    m_speekNowBtn.setBackgroundTintList(fireColor);
+                    m_csr.startListening();
+                } else if( action == MotionEvent.ACTION_UP ) {
+                    m_speekNowBtn.setBackgroundTintList(normalColor);
+                    m_csr.stopListening();
+                }
+                return true;
+            }
+        });
+
+
         m_webview = (WebView)findViewById(R.id.webView);
         m_webview.setFindListener(new WebView.FindListener() {
             @Override
@@ -163,21 +188,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         m_url = (EditText) findViewById(R.id.url);
-
-        m_mic = (ImageButton) findViewById(R.id.mic);
-        m_mic.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                //Log.d("mic onTouch", "action=" + event.getAction());
-                if( action == MotionEvent.ACTION_DOWN ) {
-                    m_csr.startListening();
-                } else if( action == MotionEvent.ACTION_UP ) {
-                    m_csr.stopListening();
-                }
-                return false;
-            }
-        });
 
         m_searchText = (EditText) findViewById(R.id.searchText);
         m_searchText.addTextChangedListener(m_textWatcher);
@@ -290,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
 
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setBuiltInZoomControls(true);
+        webview.getSettings().setDisplayZoomControls(false);
 
         // ピンチイン・アウトできるようにし、改行位置を変更しない
         webview.getSettings().setLoadWithOverviewMode(true);
