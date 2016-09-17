@@ -126,6 +126,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateNaviBtn() {
+        Button backBtn = (Button)findViewById(R.id.back);
+        Button nextBtn = (Button)findViewById(R.id.next);
+        if( !m_webview.canGoBack() ) {
+            backBtn.setEnabled(false);
+        } else {
+            backBtn.setEnabled(true);
+        }
+        if( !m_webview.canGoForward() ) {
+            nextBtn.setEnabled(false);
+        } else {
+            nextBtn.setEnabled(true);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +153,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRecognized(ArrayList<String> results) {
                 m_textFinder.doFindTextArray(results);
+            }
+        });
+
+        final Button backBtn = (Button)findViewById(R.id.back);
+        final Button nextBtn = (Button)findViewById(R.id.next);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_webview.goBack();
+                updateNaviBtn();
+            }
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_webview.goForward();
+                updateNaviBtn();
             }
         });
 
@@ -162,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
 
         m_webview = (WebView)findViewById(R.id.webView);
         m_webview.setFindListener(new WebView.FindListener() {
@@ -232,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         init(m_webview);
+        updateNaviBtn();
     }
 
     private void setInputMode(int mode) {
@@ -295,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 m_prefs.saveLastUrl(url);
+                updateNaviBtn();
             }
         });
 
