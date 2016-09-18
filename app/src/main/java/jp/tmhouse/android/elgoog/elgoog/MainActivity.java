@@ -3,6 +3,7 @@ package jp.tmhouse.android.elgoog.elgoog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             nextBtn.setEnabled(true);
         }
+        //Log.i("updateNaviBtn", "updateNaviBtn ignored");
     }
 
     @Override
@@ -153,6 +155,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRecognized(ArrayList<String> results) {
                 m_textFinder.doFindTextArray(results);
+            }
+        });
+
+        final Button homeBtn = (Button)findViewById(R.id.home);
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUrl("http://www.google.com");
             }
         });
 
@@ -191,29 +201,6 @@ public class MainActivity extends AppCompatActivity {
                     m_csr.stopListening();
                 }
                 return true;
-            }
-        });
-
-        m_webview = (WebView)findViewById(R.id.webView);
-        m_webview.setFindListener(new WebView.FindListener() {
-            @Override
-            public void onFindResultReceived(
-                    int activeMatchOrdinal, int numberOfMatches, boolean isDoneCounting) {
-                String curText = m_textFinder.getCurrentText();
-                Log.i("app", "curText=" + curText +
-                        ", activeMatchOrdinal=" + activeMatchOrdinal +
-                        ", numberOfMatches=" + numberOfMatches +
-                        ", isDoneCounting=" + Boolean.toString(isDoneCounting));
-                if( isDoneCounting && (curText != null) ) {
-                    if( numberOfMatches > 0 ) {
-                        Log.i("find text", "found text:" + curText);
-                        m_textFinder.stopFindText();
-                        setFindTextView(curText, false);
-                    } else {
-                        Log.i("find text", "not found:" + curText);
-                        m_textFinder.findNextText();
-                    }
-                }
             }
         });
 
@@ -261,8 +248,86 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        m_webview = (WebView)findViewById(R.id.webView);
+        m_webview.setFindListener(new WebView.FindListener() {
+            @Override
+            public void onFindResultReceived(
+                    int activeMatchOrdinal, int numberOfMatches, boolean isDoneCounting) {
+                String curText = m_textFinder.getCurrentText();
+                Log.i("app", "curText=" + curText +
+                        ", activeMatchOrdinal=" + activeMatchOrdinal +
+                        ", numberOfMatches=" + numberOfMatches +
+                        ", isDoneCounting=" + Boolean.toString(isDoneCounting));
+                if( isDoneCounting && (curText != null) ) {
+                    if( numberOfMatches > 0 ) {
+                        Log.i("find text", "found text:" + curText);
+                        m_textFinder.stopFindText();
+                        setFindTextView(curText, false);
+                    } else {
+                        Log.i("find text", "not found:" + curText);
+                        m_textFinder.findNextText();
+                    }
+                }
+            }
+        });
         init(m_webview);
+
+        // historyなどの復帰
+        Bundle b = savedInstanceState;
+        if( b == null ) {
+            b = m_prefs.getWebState();
+        }
+        if( b != null){
+            m_webview.restoreState(b);
+        }else{
+            loadUrl(m_prefs.getLastUrl());
+        }
+
         updateNaviBtn();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        m_webview.saveState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        m_webview.restoreState(savedInstanceState);
+    }
+    @Override
+    protected void onDestroy() {
+        m_csr.destroy();
+
+        m_prefs.saveWebState(m_webview);
+        m_webview.destroy();
+
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        m_webview.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        m_webview.onPause();
     }
 
     private void setInputMode(int mode) {
@@ -341,8 +406,6 @@ public class MainActivity extends AppCompatActivity {
         // PCモード
         String newUA= "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0";
         webview.getSettings().setUserAgentString(newUA);
-
-        loadUrl(m_prefs.getLastUrl());
     }
 
     private void loadUrl(String url) {
@@ -352,22 +415,5 @@ public class MainActivity extends AppCompatActivity {
         m_webview.loadUrl(url);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        m_csr.destroy();
-        m_webview.destroy();
-
-        super.onDestroy();
-    }
 
 }
