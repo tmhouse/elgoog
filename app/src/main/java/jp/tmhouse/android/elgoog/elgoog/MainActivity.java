@@ -173,12 +173,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        m_speekNowBtn = (FloatingActionButton)findViewById(R.id.speekNowBtn);
         final ColorStateList fireColor =
                 ColorStateList.valueOf(getResources().getColor(R.color.colorAccent));
-        final ColorStateList normalColor =
-                ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary));
+        final ColorStateList normalColor = m_speekNowBtn.getBackgroundTintList();
 
-        m_speekNowBtn = (FloatingActionButton)findViewById(R.id.speekNowBtn);
         m_speekNowBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
