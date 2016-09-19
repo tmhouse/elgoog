@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -64,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
                 String trimed = org.trim().replace(" ", "").replace("　", "");
                 if( ! org.equals(trimed) ) {
                     trimedArr.add(trimed);
-                    Log.d("doFindTextArray", "trimed added. org=" + org + ", trimed=" + trimed);
+                    if(App.DBG) Log.d("doFindTextArray", "trimed added. org=" + org + ", trimed=" + trimed);
                 } else {
-                    Log.d("doFindTextArray", "trimed not added. org=" + org);
+                    if(App.DBG) Log.d("doFindTextArray", "trimed not added. org=" + org);
                 }
             }
             arr.addAll(trimedArr);
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 m_webview.findAllAsync(m_curFindText);
             } catch (IndexOutOfBoundsException e) {
                 // end
-                Log.w("findNextText", "all text were not found");
+                if(App.DBG) Log.w("findNextText", "all text were not found");
                 String msg = null;
                 if( m_lastSpeechTextArray.size() > 1 ) {
                     msg = concatArrText() + "\nは全部見つかりません。";
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e("app", "test");
+        if(App.DBG) Log.e("app", "test");
         m_prefs = new Prefs(this);
         m_csr = new TmContinuousSpeechRecognizer(this);
         m_csr.setOnResultListener(new TmContinuousSpeechRecognizer.OnRecognizedCB() {
@@ -253,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
         m_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                m_webview.clearMatches();
                 setFindTextView("", false);
             }
         });
@@ -278,17 +278,17 @@ public class MainActivity extends AppCompatActivity {
             public void onFindResultReceived(
                     int activeMatchOrdinal, int numberOfMatches, boolean isDoneCounting) {
                 String curText = m_textFinder.getCurrentText();
-                Log.i("app", "curText=" + curText +
+                if(App.DBG) Log.i("app", "curText=" + curText +
                         ", activeMatchOrdinal=" + activeMatchOrdinal +
                         ", numberOfMatches=" + numberOfMatches +
                         ", isDoneCounting=" + Boolean.toString(isDoneCounting));
                 if( isDoneCounting && (curText != null) ) {
                     if( numberOfMatches > 0 ) {
-                        Log.i("find text", "found text:" + curText);
+                        if(App.DBG) Log.i("find text", "found text:" + curText);
                         m_textFinder.stopFindText();
                         setFindTextView(curText, false);
                     } else {
-                        Log.i("find text", "not found:" + curText);
+                        if(App.DBG) Log.i("find text", "not found:" + curText);
                         m_textFinder.findNextText();
                     }
                 }
@@ -407,9 +407,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             m_searchText.removeTextChangedListener(m_textWatcher);
             m_searchText.setText(str);
-            m_searchText.setSelection(0, str.length());
             m_searchText.addTextChangedListener(m_textWatcher);
         }
+        m_searchText.setSelection(0, str.length());
     }
 
     private TextWatcher m_textWatcher = new TextWatcher() {
@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            Log.d("afterTextChanged", "find text:" + s.toString());
+            if(App.DBG) Log.d("afterTextChanged", "find text:" + s.toString());
             m_textFinder.doFindText(s.toString());
         }
     };
@@ -448,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
                 //activity.setProgress(progress * 1000);
-                Log.d("progress", "progress=" + progress);
+                if(App.DBG) Log.d("progress", "progress=" + progress);
                 updateProgressBar(progress);
             }
             @Override
@@ -471,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String request) {
-                Log.d("url loading", "url=" + request);
+                if(App.DBG) Log.d("url loading", "url=" + request);
                 ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
                 pageIcon.setImageBitmap(null);
                 TextView pageTitle = (TextView)findViewById(R.id.pageTitle);

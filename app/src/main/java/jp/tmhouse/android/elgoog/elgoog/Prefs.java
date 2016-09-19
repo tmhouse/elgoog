@@ -52,7 +52,7 @@ public class Prefs {
 
     public void clearWebState() {
         m_ctx.deleteFile(c_WEBSTATE_FILE);
-        Log.i("saveWebState", "file clear completed.");
+        if(App.DBG) Log.i("saveWebState", "file clear completed.");
     }
 
     public void saveWebState(WebView webView) {
@@ -69,13 +69,13 @@ public class Prefs {
             int size = list.getSize();
             for( int i = 0; i < size; i++ ) {
                 WebHistoryItem item = list.getItemAtIndex(i);
-                Log.d("saveWebState", "save hist url=" + item.getUrl());
+                if(App.DBG) Log.d("saveWebState", "save hist url=" + item.getUrl());
             }
         }
 
         byte[] barr = b.getByteArray(c_WEBVIEW_CHROMIUM_STATE);
         if( barr == null ) {
-            Log.e("saveWebState", "no data");
+            if(App.DBG) Log.e("saveWebState", "no data");
             return;
         }
 
@@ -103,7 +103,7 @@ public class Prefs {
             Bundle b = new Bundle();
             b.putByteArray(c_WEBVIEW_CHROMIUM_STATE, barr);
             webView.restoreState(b);
-            Log.i("getWebState", "file read completed. size=" + size);
+            if(App.DBG) Log.i("getWebState", "file read completed. size=" + size);
             return(true);
         } catch (FileNotFoundException e) {
             //e.printStackTrace();

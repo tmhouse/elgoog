@@ -75,7 +75,7 @@ public class TmContinuousSpeechRecognizer {
             return;
         }
 
-        Log.d("startListening", "SpeechRecoginizerにintentを投げる");
+        if(App.DBG) Log.d("startListening", "SpeechRecoginizerにintentを投げる");
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
