@@ -166,7 +166,7 @@
         android:layout_marginRight="16dp"
         android:src="@android:drawable/ic_btn_speak_now"
         android:focusable="false"
-        app:backgroundTint="@android:color/white"
+        app:backgroundTint="@android:color/holo_blue_light"
         />
 
 </android.support.design.widget.CoordinatorLayout>
