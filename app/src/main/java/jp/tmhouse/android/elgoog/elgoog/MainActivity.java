@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -174,6 +178,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showDialog(c_DIALOG_CLEAR_HIST);
+            }
+        });
+
+        final Button reloadBtn = (Button)findViewById(R.id.reload);
+        reloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_webview.reload();
             }
         });
 
@@ -418,20 +430,55 @@ public class MainActivity extends AppCompatActivity {
     private void init(WebView webview) {
         final Activity activity = this;
         webview.setWebChromeClient(new WebChromeClient() {
+            @Override
             public void onProgressChanged(WebView view, int progress) {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
                 //activity.setProgress(progress * 1000);
             }
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                TextView pageTitle = (TextView)findViewById(R.id.pageTitle);
+                pageTitle.setText(title);
+            }
+
+            @Override
+            public void onReceivedIcon(WebView view, Bitmap icon) {
+                ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
+                pageIcon.setImageBitmap(icon);
+            }
         });
         webview.setWebViewClient(new WebViewClient() {
+            @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
             }
 
             @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String request) {
+                Log.d("url loading", "url=" + request);
+                ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
+                pageIcon.setImageBitmap(null);
+                TextView pageTitle = (TextView)findViewById(R.id.pageTitle);
+                pageTitle.setText("Loading...");
+                return false;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                if( ! m_url.getText().toString().equals(url) ) {
+                    m_url.setText(url);
+                }
+                // ここよりonReceivedTitleの方が先に来るからLoading中を示すには別の方法が必要
+                //TextView pageTitle = (TextView)findViewById(R.id.pageTitle);
+                //pageTitle.setText("Loading...");
+                //ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
+                //pageIcon.setImageDrawable(null);
+                updateNaviBtn();
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
                 if( ! m_url.getText().toString().equals(url) ) {
                     m_url.setText(url);
                 }

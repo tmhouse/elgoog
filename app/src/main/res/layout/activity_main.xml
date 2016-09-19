@@ -57,18 +57,24 @@
                     android:id="@+id/url"
                     android:singleLine="true"
                     android:layout_weight="1"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reload"
+                    android:id="@+id/reload"/>
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:layout_gravity="right">
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Google"
+                    android:text="Home"
                     android:id="@+id/home"/>
 
                 <Button
@@ -83,14 +89,15 @@
                     android:text="Back"
                     android:id="@+id/back"
                     android:singleLine="false"
-                    />
+                    android:layout_weight="1"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Next"
                     android:id="@+id/next"
-                    />
+                    android:layout_weight="1"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -103,11 +110,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Clear"
-                    android:id="@+id/clear"/>
+                    android:id="@+id/clear"
+                    />
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/searchText"
                     android:layout_weight="1.08"
                     android:singleLine="true" />
@@ -124,7 +132,8 @@
                         android:layout_height="wrap_content"
                         android:text="aA"
                         android:id="@+id/inputText"
-                        android:checked="true"/>
+                        android:checked="true"
+                        />
 
                     <RadioButton
                         android:layout_width="wrap_content"
@@ -140,6 +149,17 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/pageIcon"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/pageTitle"/>
 
             </LinearLayout>
 
