@@ -24,6 +24,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -427,6 +428,18 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void updateProgressBar(int val) {
+        ProgressBar pbar = (ProgressBar)findViewById(R.id.progressBar);
+        if( val >= pbar.getMax() ) {
+            pbar.setVisibility(View.GONE);
+        } else {
+            if (pbar.getVisibility() == View.GONE) {
+                pbar.setVisibility(View.VISIBLE);
+            }
+            pbar.setProgress(val);
+        }
+    }
+
     private void init(WebView webview) {
         final Activity activity = this;
         webview.setWebChromeClient(new WebChromeClient() {
@@ -435,6 +448,8 @@ public class MainActivity extends AppCompatActivity {
                 // Activities and WebViews measure progress with different scales.
                 // The progress meter will automatically disappear when we reach 100%
                 //activity.setProgress(progress * 1000);
+                Log.d("progress", "progress=" + progress);
+                updateProgressBar(progress);
             }
             @Override
             public void onReceivedTitle(WebView view, String title) {
