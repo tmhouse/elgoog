@@ -1,11 +1,11 @@
 package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
-import android.content.Context;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.os.PersistableBundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,12 +14,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private Prefs       m_prefs;
     private RadioGroup  m_inputTypeRadioGrp;
     private FloatingActionButton m_speekNowBtn;
+
+    private static final int c_DIALOG_CLEAR_HIST = 1;
 
     /**
      * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
@@ -166,6 +169,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final Button clearHistBtn = (Button)findViewById(R.id.clearHist);
+        clearHistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(c_DIALOG_CLEAR_HIST);
+            }
+        });
+
         final Button backBtn = (Button)findViewById(R.id.back);
         final Button nextBtn = (Button)findViewById(R.id.next);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -275,33 +286,64 @@ public class MainActivity extends AppCompatActivity {
         // historyなどの復帰
         Bundle b = savedInstanceState;
         if( b == null ) {
-            b = m_prefs.getWebState();
-        }
-        if( b != null){
-            m_webview.restoreState(b);
-        }else{
-            loadUrl(m_prefs.getLastUrl());
+            if( ! m_prefs.restoreWebState(m_webview) ) {
+                loadUrl("http://www.google.com");
+            }
         }
 
         updateNaviBtn();
     }
 
     @Override
+    protected Dialog onCreateDialog(int id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        switch( id ) {
+            case c_DIALOG_CLEAR_HIST:
+                builder.setTitle("Clear history?")
+                        .setMessage("OK to clear history.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // OK button pressed
+                                m_prefs.clearWebState();
+                                m_webview.clearHistory();
+                                m_webview.clearCache(true);
+                                updateNaviBtn();
+                            }
+                        })
+                        .setNegativeButton("Cancel", null);
+                break;
+            default:
+                throw new RuntimeException("unknown dialog id");
+        }
+        return builder.create();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        m_webview.saveState(outState);
+        //m_webview.saveState(outState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        m_webview.restoreState(savedInstanceState);
+        //m_webview.restoreState(savedInstanceState);
     }
     @Override
     protected void onDestroy() {
         m_csr.destroy();
 
         m_prefs.saveWebState(m_webview);
+
+        // WebView.destroy() called while WebView is still attached to window.
+        // と言われるため、まず親子切り離し
+        ViewParent vp = m_webview.getParent();
+        if( vp instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup)vp;
+            vg.removeAllViews();
+        }
+        //m_webview.removeAllViews();
         m_webview.destroy();
 
         super.onDestroy();
@@ -390,12 +432,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                m_prefs.saveLastUrl(url);
+                if( ! m_url.getText().toString().equals(url) ) {
+                    m_url.setText(url);
+                }
                 updateNaviBtn();
             }
         });
 
         webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setDomStorageEnabled(true);
         webview.getSettings().setBuiltInZoomControls(true);
         webview.getSettings().setDisplayZoomControls(false);
 
