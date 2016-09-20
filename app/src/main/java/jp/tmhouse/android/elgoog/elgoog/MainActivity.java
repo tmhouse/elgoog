@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private Button      m_clear;
     private TmContinuousSpeechRecognizer  m_csr;
     private TextFinder m_textFinder = new TextFinder();
-    private Beeper      m_beeper = new Beeper();
+    private Beeper      m_beeper;
     private Prefs       m_prefs;
     private RadioGroup  m_inputTypeRadioGrp;
     private FloatingActionButton m_speekNowBtn;
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
                 stopFindText();
-                m_beeper.beep();
+                m_beeper.playHazure();
                 return;
             }
             m_doFindTextArrayCount++;
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if(App.DBG) Log.e("app", "test");
+        m_beeper = new Beeper(this);
         m_prefs = new Prefs(this);
         m_csr = new TmContinuousSpeechRecognizer(this);
         m_csr.setOnResultListener(new TmContinuousSpeechRecognizer.OnRecognizedCB() {
@@ -285,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
                 if( isDoneCounting && (curText != null) ) {
                     if( numberOfMatches > 0 ) {
                         if(App.DBG) Log.i("find text", "found text:" + curText);
+                        m_beeper.playAtari();
                         m_textFinder.stopFindText();
                         setFindTextView(curText, false);
                     } else {
