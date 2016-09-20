@@ -5,14 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
     <!--
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-    -->
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -20,228 +17,138 @@
         android:layout_height="match_parent"
         tools:context="jp.tmhouse.android.elgoog.elgoog.MainActivity">
 
+    -->
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="1">
+            android:layout_height="wrap_content">
 
-            <!--
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="16dp"
-                android:src="@android:drawable/ic_dialog_email" />
-                -->
+                android:text="Go"
+                android:id="@+id/go"
+                />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Go"
-                    android:id="@+id/go"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/url"
-                    android:singleLine="true"
-                    android:layout_weight="1"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Reload"
-                    android:id="@+id/reload"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Home"
-                    android:id="@+id/home"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ClearHist"
-                    android:id="@+id/clearHist"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Back"
-                    android:id="@+id/back"
-                    android:singleLine="false"
-                    android:layout_weight="1"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Next"
-                    android:id="@+id/next"
-                    android:layout_weight="1"/>
-
-            </LinearLayout>
-<!--
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Clear"
-                    android:id="@+id/clear"
-                    />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/searchText"
-                    android:layout_weight="1.08"
-                    android:singleLine="true" />
-
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:id="@+id/inputTypeRadioGrp"
-                    >
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="aA"
-                        android:id="@+id/inputText"
-                        android:checked="true"
-                        />
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="123..."
-                        android:id="@+id/inputNumeric"
-                        />
-                </RadioGroup>
-
-            </LinearLayout>
-            -->
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/simple_frame"
-                >
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/pageIcon"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:id="@+id/pageTitle"/>
-
-            </LinearLayout>
-
-            <FrameLayout
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                android:id="@+id/url"
+                android:singleLine="true"
+                android:layout_weight="1"/>
 
-                <WebView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/webView"
-                    />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reload"
+                android:id="@+id/reload"/>
+        </LinearLayout>
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
-            </FrameLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:id="@+id/home"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ClearHist"
+                android:id="@+id/clearHist"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:id="@+id/back"
+                android:singleLine="false"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:id="@+id/next"
+                android:layout_weight="1"/>
 
         </LinearLayout>
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:padding="10dp"
-        android:background="@android:color/white"
-        android:alpha="0.9"
-        android:scaleType="fitXY"
-        android:elevation="8dp"
-        android:layout_gravity="bottom|left"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp"
-        android:focusable="false"
-        >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            android:alpha="1.0"
-            android:id="@+id/clear"
-            />
-
-        <EditText
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/searchText"
-            android:layout_weight="1.08"
-            android:singleLine="true" />
+            android:background="@drawable/simple_frame"
+            >
 
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:id="@+id/pageIcon"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/pageTitle"/>
+
+        </LinearLayout>
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/webView"
+            android:layout_weight="1"/>
+
+        <LinearLayout
             android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:background="@android:color/white"
+            android:alpha="0.9"
+            android:scaleType="fitXY"
+            android:elevation="8dp"
             android:focusable="false"
-            android:id="@+id/inputTypeRadioGrp"
-            android:clickable="true">
+            android:gravity="bottom">
 
-            <RadioButton
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="aA"
-                android:id="@+id/inputText"
-                android:focusable="false"
-                android:checked="true"
+                android:text="Clear"
+                android:alpha="1.0"
+                android:id="@+id/clear"
                 />
 
-            <RadioButton
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchText"
+                android:layout_weight="1.08"
+                android:singleLine="true" />
+
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="123..."
-                android:focusable="false"
-                android:id="@+id/inputNumeric"
-                />
-        </RadioGroup>
+                android:text="10key"
+                android:id="@+id/tenKeyCheckBox"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"

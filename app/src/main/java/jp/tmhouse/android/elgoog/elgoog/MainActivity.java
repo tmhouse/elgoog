@@ -21,6 +21,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private TextFinder m_textFinder = new TextFinder();
     private Beeper      m_beeper;
     private Prefs       m_prefs;
-    private RadioGroup  m_inputTypeRadioGrp;
+    private CheckBox    m_use10Key;
     private FloatingActionButton m_speekNowBtn;
 
     private static final int c_DIALOG_CLEAR_HIST = 1;
@@ -258,17 +260,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setInputMode(m_prefs.getInputMode());
+        m_use10Key = (CheckBox) findViewById(R.id.tenKeyCheckBox);
+        int inputMode = m_prefs.getInputMode();
+        m_use10Key.setChecked(inputMode == InputType.TYPE_CLASS_NUMBER);
+        setInputMode(inputMode);
 
-        m_inputTypeRadioGrp = (RadioGroup)findViewById(R.id.inputTypeRadioGrp);
-        m_inputTypeRadioGrp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        m_use10Key.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                int textModeId = ((RadioButton)findViewById(R.id.inputText)).getId();
-                if( textModeId == checkedId ) {
-                    setInputMode(InputType.TYPE_CLASS_TEXT);
-                } else {
+            public void onCheckedChanged(CompoundButton btn, boolean isChecked) {
+                if( isChecked ) {
                     setInputMode(InputType.TYPE_CLASS_NUMBER);
+                } else {
+                    setInputMode(InputType.TYPE_CLASS_TEXT);
                 }
             }
         });
@@ -389,10 +392,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setInputMode(int mode) {
         if( mode == InputType.TYPE_CLASS_NUMBER) {
-            ((RadioButton)findViewById(R.id.inputNumeric)).setChecked(true);
             m_searchText.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else if( mode == InputType.TYPE_CLASS_TEXT) {
-            ((RadioButton)findViewById(R.id.inputText)).setChecked(true);
             m_searchText.setInputType(InputType.TYPE_CLASS_TEXT);
         }
         m_prefs.saveInputMode(mode);
