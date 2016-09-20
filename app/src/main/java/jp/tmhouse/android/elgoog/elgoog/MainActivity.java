@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText m_searchText;
     private Button      m_go;
     private Button      m_clear;
+    private ImageButton m_findNext;
+    private ImageButton m_findPrev;
     private TmContinuousSpeechRecognizer  m_csr;
     private TextFinder m_textFinder = new TextFinder();
     private Beeper      m_beeper;
@@ -174,6 +178,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRecognized(ArrayList<String> results) {
                 m_textFinder.doFindTextArray(results);
+            }
+        });
+
+        m_findNext = (ImageButton)findViewById(R.id.findNext);
+        m_findNext.setRotation(m_findNext.getRotation() + 90);
+        m_findNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_webview.findNext(true);
+            }
+        });
+        m_findPrev = (ImageButton)findViewById(R.id.findPrev);
+        m_findPrev.setRotation(m_findPrev.getRotation() + 90);
+        m_findPrev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                m_webview.findNext(false);
             }
         });
 
