@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="ua_list_entries">
+        <item>internal chromium webview</item>
+        <item>chrome for windows</item>
+        <item>chrome for mac</item>
+    </string-array>
+
+    <string-array name="ua_list_entryValues">
+        <item>0</item>
+        <item>Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0 Safari/537.36</item>
+        <item>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0 Safari/537.36</item>
+    </string-array>
+</resources>

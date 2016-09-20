@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SuguDasu</string>
+
+    <string name="userAgentListKey">userAgentListKey</string>
 </resources>

@@ -3,6 +3,7 @@ package jp.tmhouse.android.elgoog.elgoog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.media.Image;
@@ -14,6 +15,8 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -203,14 +206,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadUrl("http://www.google.com");
-            }
-        });
-
-        final Button clearHistBtn = (Button)findViewById(R.id.clearHist);
-        clearHistBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(c_DIALOG_CLEAR_HIST);
             }
         });
 
@@ -543,9 +538,11 @@ public class MainActivity extends AppCompatActivity {
         webview.getSettings().setLoadWithOverviewMode(true);
         webview.getSettings().setUseWideViewPort(true);
 
-        // PCモード
-        String newUA= "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0";
-        webview.getSettings().setUserAgentString(newUA);
+        // uaはsettingsから取ってくる
+        s_webViewOriginalUserAgent = m_webview.getSettings().getUserAgentString();
+        String ua = SettingsActivity.getUserAgent(this);
+        Log.i("user agent", ua);
+        webview.getSettings().setUserAgentString(ua);
     }
 
     private void loadUrl(String url) {
@@ -555,5 +552,29 @@ public class MainActivity extends AppCompatActivity {
         m_webview.loadUrl(url);
     }
 
+    // Settingsでsummaryに表示するために使用
+    public static String s_webViewOriginalUserAgent = null;
+    public static String getWebViewOriginalUserAgent() {
+        return(s_webViewOriginalUserAgent);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.menu_clear_hist:
+                showDialog(c_DIALOG_CLEAR_HIST);
+                break;
+            case R.id.menu_settings:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+        }
+        return true;
+    }
 }

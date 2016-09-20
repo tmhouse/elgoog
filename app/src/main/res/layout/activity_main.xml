@@ -66,12 +66,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ClearHist"
-                android:id="@+id/clearHist"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="Back"
                 android:id="@+id/back"
                 android:singleLine="false"
