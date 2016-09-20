@@ -55,7 +55,16 @@ public class MainActivity extends AppCompatActivity {
         private ArrayList<String> m_lastSpeechTextArray;
         private int m_doFindTextArrayCount = 0;
         private String m_curFindText = null;
+        private Toast m_lastToast;
 
+        private void showToast(String msg) {
+            if( m_lastToast != null ) {
+                m_lastToast.cancel();
+                m_lastToast = null;
+            }
+            m_lastToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            m_lastToast.show();
+        }
         private void doFindTextArray(ArrayList<String> arr) {
             // trimしよう
             ArrayList<String> trimedArr = new ArrayList<String>(20);
@@ -113,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     msg = concatArrText() + "\nは見つかりません。";
                 }
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                showToast(msg);
                 stopFindText();
                 m_beeper.playHazure();
                 return;

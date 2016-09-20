@@ -124,13 +124,26 @@
             android:focusable="false"
             android:gravity="bottom">
 
-            <Button
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clear"
-                android:alpha="1.0"
-                android:id="@+id/clear"
-                />
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10key"
+                    android:id="@+id/tenKeyCheckBox"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clear"
+                    android:alpha="1.0"
+                    android:id="@+id/clear"
+                    />
+
+            </LinearLayout>
 
             <EditText
                 android:layout_width="match_parent"
@@ -139,11 +152,22 @@
                 android:layout_weight="1.08"
                 android:singleLine="true" />
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10key"
-                android:id="@+id/tenKeyCheckBox"/>
+            <android.support.design.widget.FloatingActionButton
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/speekNowBtn"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:alpha="0.9"
+                android:padding="0dp"
+                android:scaleType="fitXY"
+                android:elevation="8dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:src="@android:drawable/ic_btn_speak_now"
+                android:focusable="false"
+                app:backgroundTint="@android:color/holo_blue_light"
+                />
 
         </LinearLayout>
 
@@ -170,23 +194,6 @@
         android:visibility="gone"
         android:layout_marginBottom="80dp"
         android:layout_marginLeft="10dp"
-        />
-
-    <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/speekNowBtn"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:alpha="0.9"
-        android:padding="0dp"
-        android:scaleType="fitXY"
-        android:elevation="8dp"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="80dp"
-        android:layout_marginRight="16dp"
-        android:src="@android:drawable/ic_btn_speak_now"
-        android:focusable="false"
-        app:backgroundTint="@android:color/holo_blue_light"
         />
 
 </android.support.design.widget.CoordinatorLayout>

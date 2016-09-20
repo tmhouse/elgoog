@@ -182,8 +182,8 @@ public class TmContinuousSpeechRecognizer {
 
         // 音声認識の準備ができた時に呼ばれる
         public void onReadyForSpeech(Bundle params) {
-            Toast.makeText(m_act, "Speech now",
-                    Toast.LENGTH_SHORT).show();
+            //Toast.makeText(m_act, "Speech now",
+            //        Toast.LENGTH_SHORT).show();
         }
 
         // 認識結果が準備できた時に呼ばれる
