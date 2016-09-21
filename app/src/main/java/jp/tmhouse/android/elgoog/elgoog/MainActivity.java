@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -158,13 +159,17 @@ public class MainActivity extends ActionBarActivity {
         ImageButton nextBtn = (ImageButton)findViewById(R.id.forward);
         if( !m_webview.canGoBack() ) {
             backBtn.setEnabled(false);
+            backBtn.setAlpha(0.5f);
         } else {
             backBtn.setEnabled(true);
+            backBtn.setAlpha(1.0f);
         }
         if( !m_webview.canGoForward() ) {
             nextBtn.setEnabled(false);
+            nextBtn.setAlpha(0.5f);
         } else {
             nextBtn.setEnabled(true);
+            nextBtn.setAlpha(1.0f);
         }
         //Log.i("updateNaviBtn", "updateNaviBtn ignored");
     }

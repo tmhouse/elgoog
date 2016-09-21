@@ -28,7 +28,8 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@drawable/simple_frame">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -41,7 +42,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/forward"
-                android:src="@drawable/forward"/>
+                android:src="@drawable/forward"
+                android:adjustViewBounds="false"
+                android:baselineAlignBottom="false"
+                />
 
             <EditText
                 android:layout_width="match_parent"

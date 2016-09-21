@@ -8,12 +8,12 @@ android {
         applicationId "jp.tmhouse.android.elgoog.elgoog"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 7
-        versionName "1.007"
+        versionCode 8
+        versionName "1.008"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
