@@ -30,12 +30,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Go"
-                android:id="@+id/go"
+                android:id="@+id/back"
+                android:src="@drawable/back"
                 />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/forward"
+                android:src="@drawable/forward"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -44,39 +50,24 @@
                 android:singleLine="true"
                 android:layout_weight="1"/>
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reload"
-                android:id="@+id/reload"/>
-        </LinearLayout>
+                android:id="@+id/load"
+                android:src="@drawable/load"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home"
-                android:id="@+id/home"/>
+                android:id="@+id/home"
+                android:src="@drawable/home"
+                />
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Back"
-                android:id="@+id/back"
-                android:singleLine="false"
-                android:layout_weight="1"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Next"
-                android:id="@+id/next"
-                android:layout_weight="1"/>
+                android:id="@+id/reload"
+                android:src="@drawable/reload"/>
 
         </LinearLayout>
 

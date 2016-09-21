@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
     private WebView m_webview;
     private EditText m_url;
     private EditText m_searchText;
-    private Button      m_go;
+    private ImageButton      m_go;
     private Button      m_clear;
     private ImageButton m_findNext;
     private ImageButton m_findPrev;
@@ -154,8 +154,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void updateNaviBtn() {
-        Button backBtn = (Button)findViewById(R.id.back);
-        Button nextBtn = (Button)findViewById(R.id.next);
+        ImageButton backBtn = (ImageButton)findViewById(R.id.back);
+        ImageButton nextBtn = (ImageButton)findViewById(R.id.forward);
         if( !m_webview.canGoBack() ) {
             backBtn.setEnabled(false);
         } else {
@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        final Button homeBtn = (Button)findViewById(R.id.home);
+        final ImageButton homeBtn = (ImageButton)findViewById(R.id.home);
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,7 +231,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        final Button reloadBtn = (Button)findViewById(R.id.reload);
+        final ImageButton reloadBtn = (ImageButton)findViewById(R.id.reload);
         reloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,8 +239,8 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        final Button backBtn = (Button)findViewById(R.id.back);
-        final Button nextBtn = (Button)findViewById(R.id.next);
+        final ImageButton backBtn = (ImageButton)findViewById(R.id.back);
+        final ImageButton nextBtn = (ImageButton)findViewById(R.id.forward);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,7 +290,7 @@ public class MainActivity extends ActionBarActivity {
         });
         m_searchText.requestFocus();
 
-        m_go = (Button) findViewById(R.id.go);
+        m_go = (ImageButton) findViewById(R.id.load);
         m_go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
