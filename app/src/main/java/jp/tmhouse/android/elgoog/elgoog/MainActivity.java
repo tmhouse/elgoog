@@ -2,12 +2,14 @@ package jp.tmhouse.android.elgoog.elgoog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,14 +34,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ActionBarActivity {
     private WebView m_webview;
     private EditText m_url;
     private EditText m_searchText;
@@ -168,10 +169,31 @@ public class MainActivity extends AppCompatActivity {
         //Log.i("updateNaviBtn", "updateNaviBtn ignored");
     }
 
+    private void setActionBar()
+    {
+        /**アプリアイコンとタイトルを非表示*/
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setIcon(null);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(false);
+
+        /**作成したレイアウトをアクションバーに設置*/
+        LayoutInflater inflator = (LayoutInflater) getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View actionBarLayout = inflator.inflate(
+                R.layout.my_action_bar_views, null);
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.FILL_PARENT,
+                ActionBar.LayoutParams.FILL_PARENT);
+        getSupportActionBar().setCustomView(actionBarLayout, params);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setActionBar();
 
         if(App.DBG) Log.e("app", "test");
         m_beeper = new Beeper(this);
@@ -468,6 +490,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setPageTitle(String title) {
+        ((TextView)findViewById(R.id.pageTitleText)).setText(title);
+    }
+
+    private void setPageIcon(Bitmap icon) {
+        ((ImageView)findViewById(R.id.pageIconImage)).setImageBitmap(icon);
+
+    }
+
     private void init(WebView webview) {
         final Activity activity = this;
         webview.setWebChromeClient(new WebChromeClient() {
@@ -481,14 +512,12 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onReceivedTitle(WebView view, String title) {
-                TextView pageTitle = (TextView)findViewById(R.id.pageTitle);
-                pageTitle.setText(title);
+                setPageTitle(title);
             }
 
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
-                ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
-                pageIcon.setImageBitmap(icon);
+                setPageIcon(icon);
             }
         });
         webview.setWebViewClient(new WebViewClient() {
@@ -500,10 +529,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String request) {
                 if(App.DBG) Log.d("url loading", "url=" + request);
-                ImageView pageIcon = (ImageView)findViewById(R.id.pageIcon);
-                pageIcon.setImageBitmap(null);
-                TextView pageTitle = (TextView)findViewById(R.id.pageTitle);
-                pageTitle.setText("Loading...");
+                setPageIcon(null);
+                setPageTitle("Loading...");
                 return false;
             }
 
