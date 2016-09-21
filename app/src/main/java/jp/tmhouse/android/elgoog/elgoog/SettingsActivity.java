@@ -48,4 +48,10 @@ public class SettingsActivity extends PreferenceActivity {
         }
         return(val);
     }
+
+    public static boolean getStringMatchSoundOn(Context ctx) {
+        String key = ctx.getString(R.string.soundOnKey);
+        boolean val = getSp(ctx).getBoolean(key, true);
+        return(val);
+    }
 }

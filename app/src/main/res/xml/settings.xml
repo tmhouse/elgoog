@@ -3,6 +3,14 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
 
+    <CheckBoxPreference
+        android:key="@string/soundOnKey"
+        android:id="@+id/soundOnId"
+        android:title="String match sound"
+        android:defaultValue="true"
+        android:summaryOn="On"
+        android:summaryOff="Off" />
+
     <ListPreference
         android:key="@string/userAgentListKey"
         android:id="@+id/userAgentListId"

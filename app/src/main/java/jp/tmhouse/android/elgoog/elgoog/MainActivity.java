@@ -133,7 +133,9 @@ public class MainActivity extends ActionBarActivity {
                 }
                 showToast(msg);
                 stopFindText();
-                m_beeper.playHazure();
+                if( SettingsActivity.getStringMatchSoundOn(getApplicationContext()) ) {
+                    m_beeper.playHazure();
+                }
                 return;
             }
             m_doFindTextArrayCount++;
@@ -341,7 +343,9 @@ public class MainActivity extends ActionBarActivity {
                 if( isDoneCounting && (curText != null) ) {
                     if( numberOfMatches > 0 ) {
                         if(App.DBG) Log.i("find text", "found text:" + curText);
-                        m_beeper.playAtari();
+                        if( SettingsActivity.getStringMatchSoundOn(getApplicationContext()) ) {
+                            m_beeper.playAtari();
+                        }
                         m_textFinder.stopFindText();
                         setFindTextView(curText, false);
                     } else {
