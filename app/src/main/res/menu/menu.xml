@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/menu_add_bkmark"
+        android:orderInCategory="1"
+        android:title="Add bookmark"
+        />
+    <item
+        android:id="@+id/menu_show_bkmark"
+        android:orderInCategory="1"
+        android:title="Show bookmark"
+        />
+    <item
         android:id="@+id/menu_clear_hist"
         android:orderInCategory="1"
         android:title="Clear history"

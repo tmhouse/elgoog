@@ -29,21 +29,21 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/simple_frame">
+            android:background="@drawable/simple_frame"
+            >
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/back"
                 android:src="@drawable/back"
                 />
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/forward"
                 android:src="@drawable/forward"
-                android:adjustViewBounds="false"
                 android:baselineAlignBottom="false"
                 />
 
@@ -55,21 +55,21 @@
                 android:layout_weight="1"/>
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/load"
                 android:src="@drawable/load"/>
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/home"
                 android:src="@drawable/home"
                 />
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/reload"
                 android:src="@drawable/reload"/>
 
@@ -104,8 +104,8 @@
                     android:layout_height="wrap_content">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:id="@+id/clear"
                         android:src="@drawable/trush"/>
 
@@ -133,8 +133,8 @@
                 >
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/findPrev"
                     android:src="@android:drawable/ic_media_previous"
                     android:adjustViewBounds="false"
@@ -144,8 +144,8 @@
                     android:paddingBottom="8dp"/>
 
                 <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:id="@+id/findNext"
                     android:src="@android:drawable/ic_media_next"
                     android:paddingLeft="10dp"

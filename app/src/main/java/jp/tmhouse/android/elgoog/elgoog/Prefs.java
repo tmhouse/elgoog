@@ -3,6 +3,7 @@ package jp.tmhouse.android.elgoog.elgoog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.webkit.WebBackForwardList;
@@ -27,19 +28,23 @@ public class Prefs {
 
     public Prefs(Context ctx) {
         m_ctx = ctx;
-        m_sp = ctx.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        m_sp = PreferenceManager.getDefaultSharedPreferences(ctx);
     }
 
-    /***
-    public void saveLastUrl(String url) {
-        SharedPreferences.Editor e = m_sp.edit();
-        e.putString("lastUrl", url);
-        e.commit();
+    public String getUserAgent() {
+        String key = m_ctx.getString(R.string.userAgentListKey);
+        String val = m_sp.getString(key, "0");
+        if( val == null || val.equals("0") ) {
+            return(MainActivity.getWebViewOriginalUserAgent());
+        }
+        return(val);
     }
-    public String getLastUrl() {
-        return(m_sp.getString("lastUrl", "http://www.google.com"));
+
+    public boolean getStringMatchSoundOn() {
+        String key = m_ctx.getString(R.string.soundOnKey);
+        boolean val = m_sp.getBoolean(key, true);
+        return(val);
     }
-     ***/
 
     public void saveInputMode(int inputType) {
         SharedPreferences.Editor e = m_sp.edit();
@@ -112,4 +117,5 @@ public class Prefs {
         }
         return(false);
     }
+
 }

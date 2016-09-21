@@ -7,12 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -28,7 +26,6 @@ import android.view.ViewParent;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -133,7 +130,7 @@ public class MainActivity extends ActionBarActivity {
                 }
                 showToast(msg);
                 stopFindText();
-                if( SettingsActivity.getStringMatchSoundOn(getApplicationContext()) ) {
+                if( m_prefs.getStringMatchSoundOn() ) {
                     m_beeper.playHazure();
                 }
                 return;
@@ -343,7 +340,7 @@ public class MainActivity extends ActionBarActivity {
                 if( isDoneCounting && (curText != null) ) {
                     if( numberOfMatches > 0 ) {
                         if(App.DBG) Log.i("find text", "found text:" + curText);
-                        if( SettingsActivity.getStringMatchSoundOn(getApplicationContext()) ) {
+                        if( m_prefs.getStringMatchSoundOn() ) {
                             m_beeper.playAtari();
                         }
                         m_textFinder.stopFindText();
@@ -576,7 +573,7 @@ public class MainActivity extends ActionBarActivity {
 
         // uaはsettingsから取ってくる
         s_webViewOriginalUserAgent = m_webview.getSettings().getUserAgentString();
-        String ua = SettingsActivity.getUserAgent(this);
+        String ua = m_prefs.getUserAgent();
         Log.i("user agent", ua);
         webview.getSettings().setUserAgentString(ua);
     }
@@ -603,6 +600,14 @@ public class MainActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            case R.id.menu_add_bkmark:
+                String url = m_webview.getUrl();
+                String title = m_webview.getTitle();
+                if( App.DBG ) Log.d("add bookmark", "url=" + url +
+                    ", title=" + title);
+                break;
+            case R.id.menu_show_bkmark:
+                break;
             case R.id.menu_clear_hist:
                 showDialog(c_DIALOG_CLEAR_HIST);
                 break;
