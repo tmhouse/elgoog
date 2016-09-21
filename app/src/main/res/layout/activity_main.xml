@@ -90,22 +90,27 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
                 <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <Button
+                    <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Clear"
-                        android:alpha="1.0"
                         android:id="@+id/clear"
-                        />
+                        android:src="@drawable/trush"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/searchText"
+                        android:layout_weight="1"
+                        android:singleLine="true" />
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -115,19 +120,13 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/searchText"
-                    android:layout_weight="1.08"
-                    android:singleLine="true" />
-
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
                 <ImageButton
                     android:layout_width="wrap_content"
@@ -152,27 +151,28 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.FloatingActionButton
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/speekNowBtn"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:alpha="0.9"
-                android:padding="0dp"
-                android:scaleType="fitXY"
-                android:elevation="8dp"
-                android:layout_marginBottom="0dp"
-                android:layout_marginRight="3dp"
-                android:src="@android:drawable/ic_btn_speak_now"
-                android:focusable="false"
-                app:backgroundTint="@android:color/holo_blue_light"
-                android:adjustViewBounds="false"
-                android:layout_gravity="center"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/speekNowBtn"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:alpha="0.9"
+        android:padding="0dp"
+        android:scaleType="fitXY"
+        android:elevation="8dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginRight="10dp"
+        android:src="@android:drawable/ic_btn_speak_now"
+        android:focusable="false"
+        app:backgroundTint="@android:color/holo_blue_light"
+        android:adjustViewBounds="false"
+        android:layout_gravity="bottom|right"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
@@ -192,7 +192,7 @@
         android:layout_weight="1"
         android:indeterminate="false"
         android:visibility="gone"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="60dp"
         android:layout_marginLeft="10dp"
         />
 

@@ -43,8 +43,8 @@ public class MainActivity extends ActionBarActivity {
     private WebView m_webview;
     private EditText m_url;
     private EditText m_searchText;
-    private ImageButton      m_go;
-    private Button      m_clear;
+    private ImageButton m_go;
+    private ImageButton m_clear;
     private ImageButton m_findNext;
     private ImageButton m_findPrev;
     private TmContinuousSpeechRecognizer  m_csr;
@@ -298,7 +298,7 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-        m_clear = (Button)findViewById(R.id.clear);
+        m_clear = (ImageButton)findViewById(R.id.clear);
         m_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
