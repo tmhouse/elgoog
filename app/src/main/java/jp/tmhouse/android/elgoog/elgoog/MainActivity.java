@@ -605,8 +605,17 @@ public class MainActivity extends ActionBarActivity {
                 String title = m_webview.getTitle();
                 if( App.DBG ) Log.d("add bookmark", "url=" + url +
                     ", title=" + title);
+                m_prefs.addBookmark(url, title);
                 break;
             case R.id.menu_show_bkmark:
+                // test
+                LocalDB.Bookmark[] arr = m_prefs.getAllBookmarks();
+                if( arr != null ) {
+                    for (LocalDB.Bookmark b : arr) {
+                        Log.d("bkmark" + b.m_id, "url=" + b.m_url +
+                                ", title=" + b.m_title);
+                    }
+                }
                 break;
             case R.id.menu_clear_hist:
                 showDialog(c_DIALOG_CLEAR_HIST);

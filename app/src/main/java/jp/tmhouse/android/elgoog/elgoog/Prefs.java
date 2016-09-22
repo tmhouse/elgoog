@@ -16,6 +16,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mutoh on 16/9/16.
@@ -23,12 +29,14 @@ import java.io.InputStream;
 public class Prefs {
     private SharedPreferences m_sp;
     private Context     m_ctx;
+    private LocalDB     m_db;
     private static final String c_WEBSTATE_FILE = "webstate.bin";
     private static final String c_WEBVIEW_CHROMIUM_STATE = "WEBVIEW_CHROMIUM_STATE";
 
     public Prefs(Context ctx) {
         m_ctx = ctx;
         m_sp = PreferenceManager.getDefaultSharedPreferences(ctx);
+        m_db = new LocalDB(m_ctx);
     }
 
     public String getUserAgent() {
@@ -118,4 +126,15 @@ public class Prefs {
         return(false);
     }
 
+    public void addBookmark(String url, String title) {
+        m_db.addBookmark(url, title);
+    }
+
+    public LocalDB.Bookmark[] getAllBookmarks() {
+        return(m_db.getAllBookmarks());
+    }
+
+    public void updateBookmark(LocalDB.Bookmark bkmark) {
+        m_db.updateBookmark(bkmark);
+    }
 }
