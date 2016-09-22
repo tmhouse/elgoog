@@ -137,4 +137,8 @@ public class Prefs {
     public void updateBookmark(LocalDB.Bookmark bkmark) {
         m_db.updateBookmark(bkmark);
     }
+
+    public void deleteBookmark(int id) {
+        m_db.deleteBookmark(id);
+    }
 }

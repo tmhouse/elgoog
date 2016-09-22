@@ -54,6 +54,8 @@ public class MainActivity extends ActionBarActivity {
 
     private static final int c_DIALOG_CLEAR_HIST = 1;
 
+    private static final int c_REQ_ACTIVITY_BOOKMARK = 0;
+
     /**
      * 文字列配列のどれかをwebviewのページ内から探してhiglightする.
      */
@@ -603,28 +605,32 @@ public class MainActivity extends ActionBarActivity {
             case R.id.menu_add_bkmark:
                 String url = m_webview.getUrl();
                 String title = m_webview.getTitle();
-                if( App.DBG ) Log.d("add bookmark", "url=" + url +
-                    ", title=" + title);
+                if( App.DBG ) Log.d("add bookmark", "url=" + url + ", title=" + title);
                 m_prefs.addBookmark(url, title);
                 break;
             case R.id.menu_show_bkmark:
-                // test
-                LocalDB.Bookmark[] arr = m_prefs.getAllBookmarks();
-                if( arr != null ) {
-                    for (LocalDB.Bookmark b : arr) {
-                        Log.d("bkmark" + b.m_id, "url=" + b.m_url +
-                                ", title=" + b.m_title);
-                    }
-                }
+                startActivityForResult(new Intent(this, BookMarkActivity.class),
+                        c_REQ_ACTIVITY_BOOKMARK);
                 break;
             case R.id.menu_clear_hist:
                 showDialog(c_DIALOG_CLEAR_HIST);
                 break;
             case R.id.menu_settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == c_REQ_ACTIVITY_BOOKMARK) {
+                String url = data.getStringExtra("url");
+                loadUrl(url);
+            }
+        }
     }
 }

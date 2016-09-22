@@ -25,6 +25,9 @@
         <activity android:name=".SettingsActivity"
                   android:configChanges="orientation|screenSize">
         </activity>
+        <activity android:name=".BookMarkActivity"
+                  android:configChanges="orientation|screenSize">
+        </activity>
     </application>
 
 </manifest>
