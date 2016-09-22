@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,9 +35,14 @@ public class BookMarkActivity extends ListActivity {
 
     private void setupList() {
         LocalDB.Bookmark[] arr = m_prefs.getAllBookmarks();
-        List<LocalDB.Bookmark> list = Arrays.asList(arr);
-
-        setListAdapter(new ListViewAdapter(this, R.layout.bookmark_list_items, list));
+        List<LocalDB.Bookmark> list = null;
+        if( arr != null && arr.length > 0 ) {
+            list = Arrays.asList(arr);
+        } else {
+            list = new ArrayList<LocalDB.Bookmark>();
+        }
+        setListAdapter(new ListViewAdapter(
+                this, R.layout.bookmark_list_items, list));
     }
 
     // ArrayAdapterを継承したカスタムのアダプタークラス

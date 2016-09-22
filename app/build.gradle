@@ -8,8 +8,8 @@ android {
         applicationId "jp.tmhouse.android.elgoog.elgoog"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 10
-        versionName "1.010"
+        versionCode 11
+        versionName "1.011"
     }
     buildTypes {
         release {
