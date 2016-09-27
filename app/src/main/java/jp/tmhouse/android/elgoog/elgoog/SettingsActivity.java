@@ -13,7 +13,7 @@ import android.webkit.WebView;
  */
 public class SettingsActivity extends PreferenceActivity {
     private Prefs m_prefs;
-    private SharedPreferences   m_sp;
+    private SharedPreferences m_sp;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,16 +24,17 @@ public class SettingsActivity extends PreferenceActivity {
         m_prefs = new Prefs(this);
         setupSummary();
 
-        m_sp.registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    @Override
-                    public void onSharedPreferenceChanged(
-                            SharedPreferences sharedPreferences, String key) {
-                        setupSummary();
-                    }
-                }
-        );
+        m_sp.registerOnSharedPreferenceChangeListener(m_spChangeCB);
     }
+
+    private SharedPreferences.OnSharedPreferenceChangeListener m_spChangeCB =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(
+                        SharedPreferences sharedPreferences, String key) {
+                    setupSummary();
+                }
+            };
 
     private void setupSummary() {
         ListPreference lp = (ListPreference)

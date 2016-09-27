@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity {
         setActionBar();
 
         if(App.DBG) Log.e("app", "test");
-        m_beeper = new Beeper(this);
+        m_beeper = Beeper.getInstance(this);
         m_prefs = new Prefs(this);
         m_csr = new TmContinuousSpeechRecognizer(this);
         m_csr.setOnResultListener(new TmContinuousSpeechRecognizer.OnRecognizedCB() {

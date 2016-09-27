@@ -22,9 +22,11 @@ public class TmContinuousSpeechRecognizer {
     private Activity m_act;
     private OnRecognizedCB      m_cb;
     private boolean     m_isListening = false;
+    private Beeper      m_beeper;
 
     public TmContinuousSpeechRecognizer(Activity act) {
         m_act = act;
+        m_beeper = Beeper.getInstance(act);
 
         checkPermission();
 
@@ -63,6 +65,7 @@ public class TmContinuousSpeechRecognizer {
         if( m_sr == null ) {
             Toast.makeText(m_act, "音声認識が使えません",
                     Toast.LENGTH_LONG).show();
+            m_beeper.playHatena();
             return;
         }
 
@@ -148,6 +151,7 @@ public class TmContinuousSpeechRecognizer {
                 // No recognition result matched
                 case SpeechRecognizer.ERROR_NO_MATCH:
                     reason = "ERROR_NO_MATCH";
+                    m_beeper.playHatena();
                     break;
                 // RecognitionService busy
                 case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:

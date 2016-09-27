@@ -1,0 +1,3 @@
+アイコンの取得元
+	http://icooon-mono.com/
+
