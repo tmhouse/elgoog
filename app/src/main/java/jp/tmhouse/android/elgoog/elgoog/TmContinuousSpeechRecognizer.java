@@ -32,13 +32,17 @@ public class TmContinuousSpeechRecognizer {
 
         if (m_sr == null) {
             m_sr = SpeechRecognizer.createSpeechRecognizer(m_act);
-            if (!SpeechRecognizer.isRecognitionAvailable(m_act)) {
+            if ( ! isAvailable() ) {
                 Toast.makeText(m_act, "音声認識が使えません",
                         Toast.LENGTH_LONG).show();
-                throw new RuntimeException("speech recognizer not available");
+                //throw new RuntimeException("speech recognizer not available");
             }
             m_sr.setRecognitionListener(new listener());
         }
+    }
+
+    public boolean isAvailable() {
+        return(SpeechRecognizer.isRecognitionAvailable(m_act));
     }
 
     public interface OnRecognizedCB {
@@ -62,7 +66,7 @@ public class TmContinuousSpeechRecognizer {
 
     // 音声入力を開始する
     public synchronized void startListening() {
-        if( m_sr == null ) {
+        if( m_sr == null || !isAvailable() ) {
             Toast.makeText(m_act, "音声認識が使えません",
                     Toast.LENGTH_LONG).show();
             m_beeper.playHatena();
